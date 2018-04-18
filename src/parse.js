@@ -81,6 +81,29 @@ module.exports = function parse(result, current, parent) {
 			var method = at(current, 'content.0.content.0.props.method'); 
 			current.id = 'transition-' + slugify(meta.title + '-' + method);
 			current.xhrContent = xhrContent(current, parent);
+
+			var httpTransaction = result.content.find(function(c) { return c.element === 'httpTransaction' }).content;
+			var httpRequestContent = httpTransaction.find(function(c) { return c.element === 'httpRequest' }).content;
+
+			var httpRequestBody = null;
+			if(Array.isArray(httpRequestContent) && httpRequestContent.length > 0) {
+				httpRequestBody = httpRequestContent[0].content;
+			}
+
+			if(httpRequestBody !== null) {
+				try {
+					httpRequestBody = JSON.parse(httpRequestBody);
+					httpRequestBody = JSON.stringify(httpRequestBody);
+
+					current.xhrContent.postData.text = httpRequestBody;
+				} catch(e) {
+					console.log("------------------------------");
+					console.log(httpRequestBody);
+					console.log(e);
+					console.log("------------------------------");
+				}
+			}
+
 			current.snippet = unescape((new HTTPSnippet(current.xhrContent)).convert('shell', 'curl'));
 			current.snippets = [];
 
