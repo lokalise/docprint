@@ -277,9 +277,6 @@ function xhrContent(transition, resource) {
 	transProps = transition.props || {};
 	var method = requestProps && requestProps.method;
 	var urlParameters = _extends(transProps.urlParameters, requestProps.urlParameters);
-	
-	console.log(urlParameters);
-
 	var headers = requestProps.headers;
 	var postData = httpRequest.content.find(function(c) { return c.type=== 'body' } );
 	var mimeType = headers.find(function(c) { 
