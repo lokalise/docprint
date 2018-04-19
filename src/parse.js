@@ -95,7 +95,6 @@ module.exports = function parse(result, current, parent) {
 					httpRequestBody = JSON.parse(httpRequestBody);
 					httpRequestBody = JSON.stringify(httpRequestBody);
 					// httpRequestBody = JSON.stringify(httpRequestBody, null, "\t");
-					// console.log(httpRequestBody);
 					current.xhrContent.postData.text = httpRequestBody;
 				} catch(e) {
 					console.log("------------------------------");
@@ -211,7 +210,7 @@ function getProps(props){
 	try {
 		props.hrefVariables.content.forEach(function(variable) {
 			urlParameters.push({
-				wfn : variable.meta && variable.meta.description,
+				description: variable.meta && variable.meta.description,
 				key: variable.content && variable.content.key,
 				value: variable.content && variable.content.value
 			})
@@ -278,6 +277,9 @@ function xhrContent(transition, resource) {
 	transProps = transition.props || {};
 	var method = requestProps && requestProps.method;
 	var urlParameters = _extends(transProps.urlParameters, requestProps.urlParameters);
+	
+	console.log(urlParameters);
+
 	var headers = requestProps.headers;
 	var postData = httpRequest.content.find(function(c) { return c.type=== 'body' } );
 	var mimeType = headers.find(function(c) { 
