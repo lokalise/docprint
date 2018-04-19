@@ -118,7 +118,7 @@ body(class=headerContent ? 'headers-available': '')
 															else
 																.sample-request-body-description.rhs-highlight.code !{body.content}
 											.sample-request
-												.sample-request-heading.rhs-heading Example Request
+												.rhs-heading Example Request
 												if lang && transition.snippets && transition.snippets[lang]
 													.sample-request-description.rhs-highlight.code 
 														| !{transition.snippets[lang].replaceAll('\\\n', '\\\<br>')}
@@ -145,7 +145,7 @@ body(class=headerContent ? 'headers-available': '')
 																						span.key.hljs-attr #{header.key.content}: 
 																						span.value #{header.value.content}
 														if body && body.type === 'body'
-															.sample-response-body.rhs-heading Response Body
+															.sample-response-body.rhs-heading Example Response
 															if(body.content.isJSON())
 																.sample-response-body-description.rhs-highlight.code !{JSON.stringify(JSON.parse(body.content), 0, 2)}
 															else

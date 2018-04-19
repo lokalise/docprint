@@ -93,8 +93,8 @@ module.exports = function parse(result, current, parent) {
 			if(httpRequestBody !== null) {
 				try {
 					httpRequestBody = JSON.parse(httpRequestBody);
-					httpRequestBody = JSON.stringify(httpRequestBody);
-
+					httpRequestBody = JSON.stringify(httpRequestBody, null, "\t");
+					console.log(httpRequestBody);
 					current.xhrContent.postData.text = httpRequestBody;
 				} catch(e) {
 					console.log("------------------------------");
