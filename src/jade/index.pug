@@ -112,7 +112,7 @@ body(class=headerContent ? 'headers-available': '')
 													if transaction.type === 'httpRequest'
 														- var body = transaction.content && transaction.content[0];
 														if body && body.type === 'body'
-															.sample-request-body.rhs-heading Request Body
+															.sample-request-body.rhs-heading Example Request Body
 															if(body.content.isJSON())
 																.sample-request-body-description.rhs-highlight.code !{JSON.stringify(JSON.parse(body.content), 0, 2)}
 															else
