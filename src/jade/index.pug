@@ -4,10 +4,8 @@ html
 	style(type='text/css').
 		!{css}
 		!{customCSS}
-body(class=headerContent ? 'headers-available': '')
+body
 	include ./mixins
-	.custom-header
-		| !{headerContent}
 	.documentation
 		- var intro = output.content && output.content[0]
 		.top-header
@@ -21,6 +19,8 @@ body(class=headerContent ? 'headers-available': '')
 				span.lan(lang="go", class=lang === 'go' ? 'selected' : '') Go
 
 		.sidebar
+			.custom-header
+				| !{headerContent}
 			nav.sidebar-nav
 				if (intro && intro.description && intro.description.text)
 					if intro.description.links && intro.description.links.length
