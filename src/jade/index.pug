@@ -97,16 +97,16 @@ body(class=headerContent ? 'headers-available': '')
 													span.api-url  !{transition.xhrContent.originalUrl.replaceAll('{', '<mark>{').replaceAll('}', '}</mark>')}
 
 											.sample-request-heading.rhs-heading Request
-											if transition.xhrContent.headers && transition.xhrContent.headers.length
-												.headers
-													.headers-heading.rhs-heading Request Headers
-													.headers-description.code.rhs-highlight
-														pre.hljs
-															code
-																each header in transition.xhrContent.headers
-																	.header-row
-																		span.key.hljs-attr #{header.name}: 
-																		span.value #{header.value}
+//											if transition.xhrContent.headers && transition.xhrContent.headers.length
+//												.headers
+//													.headers-heading.rhs-heading Request Headers
+//													.headers-description.code.rhs-highlight
+//														pre.hljs
+//															code
+//																each header in transition.xhrContent.headers
+//																	.header-row
+//																		span.key.hljs-attr #{header.name}: 
+//																		span.value #{header.value}
 											- var transactions = transition.content && transition.content[0] && transition.content[0].content;
 											each transaction, index in transactions
 													if transaction.type === 'httpRequest'
@@ -133,17 +133,17 @@ body(class=headerContent ? 'headers-available': '')
 															if transaction.props && transaction.props.statusCode
 																span.status-code #{transaction.props && transaction.props.statusCode}
 														- var body = transaction.content && transaction.content[0];
-														if transaction.props && transaction.props.headers && transaction.props.headers.length
-															.headers
-																.headers-heading.rhs-heading Response Headers
-																.headers-description.code.rhs-highlight
-																	pre.hljs
-																		code
-																			each header in transaction.props.headers
-																				if header.key && header.key.content && header.value && header.value.content
-																					.header-row
-																						span.key.hljs-attr #{header.key.content}: 
-																						span.value #{header.value.content}
+//														if transaction.props && transaction.props.headers && transaction.props.headers.length
+//															.headers
+//																.headers-heading.rhs-heading Response Headers
+//																.headers-description.code.rhs-highlight
+//																	pre.hljs
+//																		code
+//																			each header in transaction.props.headers
+//																				if header.key && header.key.content && header.value && header.value.content
+//																					.header-row
+//																						span.key.hljs-attr #{header.key.content}: 
+//																						span.value #{header.value.content}
 														if body && body.type === 'body'
 															.sample-response-body.rhs-heading Example Response
 															if(body.content.isJSON())
