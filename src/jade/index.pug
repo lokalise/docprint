@@ -23,8 +23,6 @@ body(class=headerContent ? 'headers-available': '')
 		.sidebar
 			nav.sidebar-nav
 				if (intro && intro.description && intro.description.text)
-					//.group-header
-						//a(href='#top', _href='#top') Overview
 					if intro.description.links && intro.description.links.length
 						ul
 							li.resource-header
@@ -54,19 +52,8 @@ body(class=headerContent ? 'headers-available': '')
 		.container
 			.doc-body.col-12
 				- var intro = output.content && output.content[0]
-				.row
-					.col-6.lhs
-						.group-heading.top(id=intro.id) #{intro.title}
-						if intro.description && intro.description.text
-							.description !{intro.description.text}
 				each group in output.content[0].content
 					if group.type === 'resourceGroup'
-						.row
-							.col-6.lhs
-								.group-heading.way-point(id=group.id) #{group.title}
-								if group.description && group.description.text
-									.description !{group.description.text}
-							.col-6.rhs
 						each resource in group.content
 							.row
 								.col-6.lhs
@@ -96,29 +83,18 @@ body(class=headerContent ? 'headers-available': '')
 														span.api-method(class=transition.xhrContent.method.toLowerCase()) #{transition.xhrContent.method}
 													span.api-url  !{transition.xhrContent.originalUrl.replaceAll('{', '<mark>{').replaceAll('}', '}</mark>')}
 
-											.sample-request-heading.rhs-heading Request
-//											if transition.xhrContent.headers && transition.xhrContent.headers.length
-//												.headers
-//													.headers-heading.rhs-heading Request Headers
-//													.headers-description.code.rhs-highlight
-//														pre.hljs
-//															code
-//																each header in transition.xhrContent.headers
-//																	.header-row
-//																		span.key.hljs-attr #{header.name}: 
-//																		span.value #{header.value}
 											- var transactions = transition.content && transition.content[0] && transition.content[0].content;
 											each transaction, index in transactions
 													if transaction.type === 'httpRequest'
 														- var body = transaction.content && transaction.content[0];
 														if body && body.type === 'body'
-															.sample-request-body.rhs-heading Example Request Body
+															.sample-request-body.rhs-heading Example request body
 															if(body.content.isJSON())
 																.sample-request-body-description.rhs-highlight.code !{JSON.stringify(JSON.parse(body.content), 0, 2)}
 															else
 																.sample-request-body-description.rhs-highlight.code !{body.content}
 											.sample-request
-												.rhs-heading Example Request
+												.rhs-heading Example request
 												if lang && transition.snippets && transition.snippets[lang]
 													.sample-request-description.rhs-highlight.code 
 														| !{transition.snippets[lang].replaceAll('\\\n', '\\\<br>')}
@@ -128,24 +104,9 @@ body(class=headerContent ? 'headers-available': '')
 												- var transactions = transition.content && transition.content[0] && transition.content[0].content;
 												each transaction, index in transactions
 													if transaction.type === 'httpResponse'
-														.sample-response-heading.rhs-heading 
-															span Response 
-															if transaction.props && transaction.props.statusCode
-																span.status-code #{transaction.props && transaction.props.statusCode}
 														- var body = transaction.content && transaction.content[0];
-//														if transaction.props && transaction.props.headers && transaction.props.headers.length
-//															.headers
-//																.headers-heading.rhs-heading Response Headers
-//																.headers-description.code.rhs-highlight
-//																	pre.hljs
-//																		code
-//																			each header in transaction.props.headers
-//																				if header.key && header.key.content && header.value && header.value.content
-//																					.header-row
-//																						span.key.hljs-attr #{header.key.content}: 
-//																						span.value #{header.value.content}
 														if body && body.type === 'body'
-															.sample-response-body.rhs-heading Example Response
+															.sample-response-body.rhs-heading Example response
 															if(body.content.isJSON())
 																.sample-response-body-description.rhs-highlight.code !{JSON.stringify(JSON.parse(body.content), 0, 2)}
 															else

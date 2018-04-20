@@ -150,7 +150,7 @@ module.exports = function parse(result, current, parent) {
 			var trId = capitalize(current.content[0] && current.content[0].meta && current.content[0].meta.id)
             if (trId) {
 			    current.id = 'object-' + slugify(trId);
-			    current.title = trId + ' Object';
+			    current.title = 'The ' + trId.slice(0, -1).toLowerCase() + ' object';
             }
 			break;
 		case 'httpTransaction':
