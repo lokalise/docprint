@@ -39,7 +39,7 @@ mixin renderAttributes(attrs, ds)
 									if c.value.attributes && c.value.attributes && c.value.attributes.default
 										span.default Default value is #{c.value.attributes.default}
 									if c.value.content && c.value.element !== 'object'
-										span.example Example: #{c.value.content}
+										span.example Default: #{c.value.content}
 						.right
 							if attr.meta && attr.meta.description
 								span.description #{attr.meta.description}
