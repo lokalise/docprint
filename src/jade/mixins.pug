@@ -15,7 +15,7 @@ mixin renderUrlParameters(params)
 								span.example Default: #{param.value.content}
 					.right
 						if param.description
-							span.description #{param.description}
+							span.description !{param.description}
 mixin renderAttributes(attrs, ds)
 	if (attrs.element === 'object' && attrs.content)
 		if attrs.content.length
@@ -42,7 +42,7 @@ mixin renderAttributes(attrs, ds)
 										span.example Default: #{c.value.content}
 						.right
 							if attr.meta && attr.meta.description
-								span.description #{attr.meta.description}
+								span.description !{attr.meta.description}
 						if c && c.value
 							if c.value.element === 'object'
 								.child-attr
