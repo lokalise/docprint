@@ -50,7 +50,7 @@ module.exports = function(options) {
 		dataStructures = dataStructures && dataStructures.content;
 
 		var css = fs.readFileSync(__dirname + '/css/style.css').toString();
-		var langs = ['curl', 'node', 'python', 'java', 'ruby', 'php', 'go'];
+		var langs = ['curl', 'java'];
 
 		langs.forEach(function(l) {
 			mkdir.sync(destFolder + '/' + l);

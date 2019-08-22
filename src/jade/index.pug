@@ -13,13 +13,10 @@ body
 		- var intro = output.content && output.content[0]
 		.top-header
 			.lang-header.part-header
-				span.lan(lang="curl", class=lang === 'curl' ? 'selected' : '') curl
-				span.lan(lang="node", class=lang === 'node' ? 'selected' : '') Node
-				span.lan(lang="python", class=lang === 'python' ? 'selected' : '') Python
-				span.lan(lang="java", class=lang === 'java' ? 'selected' : '') Java
-				span.lan(lang="ruby", class=lang === 'ruby' ? 'selected' : '') Ruby
-				span.lan(lang="php", class=lang === 'php' ? 'selected' : '') php
-				span.lan(lang="go", class=lang === 'go' ? 'selected' : '') Go
+				a(class='sdk-link', href='https://github.com/lokalise/php-lokalise-api', target='_new') PHP
+				a(class='sdk-link', href='https://github.com/lokalise/ruby-lokalise-api', target='_new') Ruby
+				a(class='sdk-link', href='https://github.com/lokalise/node-lokalise-api', target='_new') Node.js
+
 
 		.sidebar
 			.custom-header

@@ -410,3 +410,13 @@ li.param:last-child, li.attr:last-child {
 .hljs-attr {
 	color: #4aba09;
 }
+
+.sdk-link {
+    color: #999;
+    padding-right: 25px;
+    padding-left: 5px;
+}
+
+.sdk-link:hover {
+    color: #eee;
+}
