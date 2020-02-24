@@ -102,16 +102,29 @@ body
 												else
 													.sample-request-description.rhs-highlight.code !{transition.snippet.replaceAll('\\\n', '\\\<br>')}
 											.sample-response
-												- var transactions = transition.content && transition.content[0] && transition.content[0].content;
-												each transaction, index in transactions
-													if transaction.type === 'httpResponse'
-														- var body = transaction.content && transaction.content[0];
-														if body && body.type === 'body'
-															.sample-response-body.rhs-heading Example response
-															if(body.content.isJSON())
-																.sample-response-body-description.rhs-highlight.code !{JSON.stringify(JSON.parse(body.content), 0, 2)}
-															else
-																.sample-response-body-description.rhs-highlight.code !{body.content}
+												each blocks in transition.content
+													- var transactions = blocks && blocks.content;
+													each transaction, index in transactions
+														if transaction.type === 'httpResponse'
+															- var body = transaction.content && transaction.content[0];
+															- var header = transaction.props && transaction.props.headers[1]
+															if body || header
+																.sample-response-body.rhs-heading Example response (!{transaction.props.statusCode})
+															if header
+																.sample-response-body.rhs-heading Headers
+															if header
+																if !body
+																	.sample-response-body-description.rhs-highlight.code !{header.key.content}: !{header.value.content}
+																else
+																	.sample-response-body-description.rhs-highlight-headers.code !{header.key.content}: !{header.value.content}
+															if body && body.type === 'body'
+																if header
+																	.sample-response-body.rhs-heading Body
+																if(body.content.isJSON())
+																	.sample-response-body-description.rhs-highlight.code !{JSON.stringify(JSON.parse(body.content), 0, 2)}
+																else
+																	.sample-response-body-description.rhs-highlight.code !{body.content}
+
 								else if (transition.type === 'dataStructure')
 									.row
 										.col-6.lhs
