@@ -244,7 +244,8 @@ body
 			var refElem = document.querySelector('.doc-body');
 			var targetElem = document.getElementById('sdk-links');
 			var fnAlignSdkLinksWidth = function () {
-				targetElem.style.width = refElem.offsetWidth / 2 + "px"
+				targetElem.style.width = refElem.offsetWidth / 2 + "px";
+				targetElem.style.right = (window.innerWidth - refElem.getBoundingClientRect().right).toString() + "px"; // Constant scrollbar fix
 			};
 			document.addEventListener("DOMContentLoaded", fnAlignSdkLinksWidth);
 			window.addEventListener("resize", fnAlignSdkLinksWidth);
