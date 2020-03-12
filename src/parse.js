@@ -1,5 +1,6 @@
 var HTTPSnippet = require('httpsnippet');
 var cheerio = require('cheerio');
+var nlp = require("compromise");
 var util = require('./util');
 var host = require('./host');
 
@@ -147,10 +148,13 @@ module.exports = function parse(result, current, parent) {
 			var meta = getMeta(result.meta);
 			current.type = 'dataStructure';
 			current.content = result.content;
-			var trId = capitalize(current.content[0] && current.content[0].meta && current.content[0].meta.id)
+			var oTitle = current.content[0] && current.content[0].meta && current.content[0].meta.id;
+			var trId = capitalize(oTitle);
             if (trId) {
 			    current.id = 'object-' + slugify(trId);
-			    current.title = 'The ' + trId.slice(0, -1) + ' object';
+                var g = nlp('The ' + oTitle);
+                g.match("#Noun").nouns().toSingular();
+			    current.title = g.out('text') + ' object';
             }
 			break;
 		case 'httpTransaction':
