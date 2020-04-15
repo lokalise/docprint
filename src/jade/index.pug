@@ -11,14 +11,6 @@ body
 	include ./mixins
 	.documentation
 		- var intro = output.content && output.content[0]
-		.top-header
-			.lang-header.part-header
-				a(class='sdk-link', href='https://github.com/lokalise/php-lokalise-api', target='_new') PHP
-				a(class='sdk-link', href='https://github.com/lokalise/ruby-lokalise-api', target='_new') Ruby
-				a(class='sdk-link', href='https://github.com/lokalise/node-lokalise-api', target='_new') Node.js
-				a(class='sdk-link', href='https://github.com/lokalise/go-lokalise-api', target='_new') Golang
-
-
 		.sidebar
 			.custom-header
 				| !{headerContent}
@@ -52,6 +44,11 @@ body
 														span.child-nav-text #{transition.title}
 		.container
 			.doc-body.col-12
+				nav#sdk-links
+					a(class='sdk-link', href='https://github.com/lokalise/php-lokalise-api', target='_new') PHP
+					a(class='sdk-link', href='https://github.com/lokalise/ruby-lokalise-api', target='_new') Ruby
+					a(class='sdk-link', href='https://github.com/lokalise/node-lokalise-api', target='_new') Node.js
+					a(class='sdk-link', href='https://github.com/lokalise/go-lokalise-api', target='_new') Golang
 				- var intro = output.content && output.content[0]
 				each group in output.content[0].content
 					if group.type === 'resourceGroup'
@@ -176,20 +173,6 @@ body
 					selected && selected.classList.remove('selected');
 				}
 			});
-			var langBar = document.querySelector('.top-header .lang-header');
-			langBar.addEventListener('click', function(e) {
-				if (e.target.classList.contains('lan')) {
-					var selectedLang = langBar.querySelector('.selected');
-					selectedLang = selectedLang && selectedLang.getAttribute('lang')
-					var targetLang = e.target.getAttribute('lang');
-					if (window.location.pathname.indexOf('/' + selectedLang) !== -1) {
-						window.location.pathname = window.location.pathname.replace('/' + selectedLang, '/' + targetLang);
-					} else if (window.location.search.indexOf(selectedLang) !== -1) {
-						window.location.search = window.location.search.replace(selectedLang, targetLang);
-					} else {
-					}
-				}
-			})
 			var waypoints = document.querySelectorAll('.way-point');
 			function selectSection(navEl) {
 				var selected;
@@ -229,7 +212,6 @@ body
 				selectSection(navEl)
 			}, 0, true)
 			var hAnchors = document.querySelectorAll('.header-anchor');
-			var topElement = document.querySelector('.top')
 			for(var i = 0;i < waypoints.length; i++) {
 				new Waypoint({
 					continuous: false,
@@ -247,13 +229,6 @@ body
 					offset: 20
 				});
 			}
-			new Waypoint({
-				continuous: false,
-				context: document.querySelector('.container'),
-				element: topElement,
-				handler: wayHandler,
-				offset: -10
-			});
 			function debounce(func, wait, immediate) {
 				var timeout;
 				return function() {
@@ -277,3 +252,13 @@ body
 				var navEl = document.querySelector('.sidebar a');
 				selectSection(navEl)
 			}
+
+			// SDK links container align
+			var refElem = document.querySelector('.doc-body');
+			var targetElem = document.getElementById('sdk-links');
+			var fnAlignSdkLinksWidth = function () {
+				targetElem.style.width = refElem.offsetWidth / 2 + "px";
+				targetElem.style.right = (window.innerWidth - refElem.getBoundingClientRect().right).toString() + "px"; // Constant scrollbar fix
+			};
+			document.addEventListener("DOMContentLoaded", fnAlignSdkLinksWidth);
+			window.addEventListener("resize", fnAlignSdkLinksWidth);
