@@ -371,6 +371,17 @@ li.param:last-child, li.attr:last-child {
     margin-bottom: 70px;
 }
 
+.rhs-highlight-headers {
+    padding: 0 20px;
+    margin: 20px;
+    padding: 20px 20px;
+    background: #272b2d;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    word-break: break-all;
+}
+
 .headers-description {
 	margin-bottom: 50px;
 }
