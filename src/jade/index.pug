@@ -27,7 +27,7 @@ body
 				each group in output.content[0].content
 					if group.type === 'resourceGroup'
 						.group-header
-							a(href='#' + group.id, _href='#' + group.id) #{group.title}
+							span #{group.title}
 						ul
 							each resource in group.content
 								li.resource-header
@@ -53,17 +53,17 @@ body
 				each group in output.content[0].content
 					if group.type === 'resourceGroup'
 						each resource in group.content
-							.row
+							.row.way-point(id=resource.id)
 								.col-6.lhs
-									.resource-heading.way-point(id=resource.id) #{resource.title}
+									.resource-heading #{resource.title}
 									if resource.description && resource.description.text
 										.description !{resource.description.text}
 								.col-6.rhs
 							each transition in resource.content
 								if (transition.type === 'transition')
-									.row
+									.row.way-point(id=transition.id)
 										.col-6.lhs
-											.transition-heading.way-point(id=transition.id) #{transition.title}
+											.transition-heading #{transition.title}
 											if transition.description && transition.description.text
 												.description !{transition.description.text}
 											if transition.xhrContent.urlParameters && transition.xhrContent.urlParameters.length
@@ -123,27 +123,33 @@ body
 																	.sample-response-body-description.rhs-highlight.code !{body.content}
 
 								else if (transition.type === 'dataStructure')
-									.row
+									.row.way-point(id=transition.id)
 										.col-6.lhs
-											.transition-heading.way-point(id=transition.id) #{transition.title}
+											.transition-heading #{transition.title}
 											h5.part-heading Attributes
 											+renderAttributes(transition.content[0], dataStructures)
 		script(src='https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.min.js')
 		script.
-			function triggerEvent(el, eventName) {
-			    if (!el) return;
-			    var evt;
-			    try {
-			        evt = new window.Event(eventName, {bubbles: true});
-			    }
-			    catch (e) {
-			        evt = document.createEvent('Event');
-			        evt.initEvent(eventName, true, false);
-			    }
-			    finally {
-			        el.dispatchEvent(evt);
-			    }
-			};
+			// polyfill for closest()
+			if (!Element.prototype.matches) {
+				Element.prototype.matches =
+						Element.prototype.msMatchesSelector ||
+						Element.prototype.webkitMatchesSelector;
+			}
+
+			if (!Element.prototype.closest) {
+				Element.prototype.closest = function (s) {
+					var el = this;
+
+					do {
+						if (Element.prototype.matches.call(el, s)) return el;
+						el = el.parentElement || el.parentNode;
+					} while (el !== null && el.nodeType === 1);
+					return null;
+				};
+			}
+			// end of polyfill for closest()
+			var initialHash = window.location.hash;
 			var docbody = document.querySelector('.doc-body');
 			docbody.addEventListener('click', function(e) {
 				if (e.target.classList.contains('expand') || e.target.classList.contains('close')) {
@@ -151,89 +157,54 @@ body
 					childAttr.classList.toggle('show');
 				}
 			});
-			var sidebar = document.querySelector('.sidebar');
-			sidebar.addEventListener('click', function(e) {
-				if (e.target.classList.contains('resource-nav-item')) {
-					var selected = sidebar.querySelector('.resource-header.expand');
-					var resourceHeader = e.target.parentNode;
-					if (selected !== e.target.parentNode) {
-						selected && selected.classList.remove('expand');
-						resourceHeader.classList.add('expand');
-					}
-				} else if (e.target.classList.contains('child-nav-text')) {
-					var selected = sidebar.querySelector('.child-nav-item.selected');
-					if (selected !== e.target.parentNode) {
-						selected && selected.classList.remove('selected');
-						e.target.parentNode.classList.add('selected');
-					}
-				} else if (e.target && e.target.parentNode && e.target.parentNode.classList.contains('group-header')) {
-					var selected = sidebar.querySelector('.resource-header.expand');
-					selected && selected.classList.remove('expand');
-					selected = sidebar.querySelector('.child-nav-item.selected');
-					selected && selected.classList.remove('selected');
-				}
-			});
-			var waypoints = document.querySelectorAll('.way-point');
-			function selectSection(navEl) {
-				var selected;
-				if (navEl) {
-					if (navEl.classList.contains('child-nav-item')) {
-						var resourceNav = navEl.parentNode.parentNode.parentNode;
-						selected = sidebar.querySelector('.child-nav-item.selected');
-						selected && (selected !== navEl) && selected.classList.remove('selected');
-						selected = sidebar.querySelector('.resource-header.expand');
-						selected && (selected !== resourceNav) && selected.classList.remove('expand');
-						resourceNav.classList.add('expand');
-						navEl.classList.add('selected');
-					} else if (navEl.classList.contains('resource-nav-item')) {
-						selected = sidebar.querySelector('.child-nav-item.selected');
-						selected && (selected !== navEl) && selected.classList.remove('selected');
-						selected = sidebar.querySelector('.resource-header.expand');
-						selected && (selected !== resourceNav) && selected.classList.remove('expand');
-						navEl.parentNode && navEl.parentNode.classList.add('expand');
-					} else {
-						selected = sidebar.querySelector('.child-nav-item.selected');
-						selected && (selected !== navEl) && selected.classList.remove('selected');
-						selected = sidebar.querySelector('.resource-header.expand');
-						selected && (selected !== resourceNav) && selected.classList.remove('expand');
-					}
-				}
-			}
-			var wayHandler = debounce(function() {
 
-				if (this.element.classList.contains('header-anchor')) {
-					this.element = this.element.parentNode;
+			var firstSectionChangedLoading = false
+			function selectSection(elementHash) {
+				var urlHash = window.location.hash;
+				var hash = elementHash
+
+				if(!firstSectionChangedLoading && hash !== urlHash) {
+					firstSectionChangedLoading = true
+					window.location.hash = ''
+				} else if ((urlHash && hash !== urlHash)) {
+					hash = urlHash
 				}
 
-				var tid = this.element.id;
-				var id = '#' + this.element.id;
+				var navAnchor = document.querySelector('.sidebar a[_href=\"' + hash + '\"]');
 
-				var navEl = document.querySelector('.sidebar a[_href=\"' + id + '\"]');
-				selectSection(navEl)
-			}, 0, true)
-			var hAnchors = document.querySelectorAll('.header-anchor');
-			for(var i = 0;i < waypoints.length; i++) {
-				new Waypoint({
-					continuous: false,
-					context: document.querySelector('.container'),
-					element: waypoints[i],
-					handler: wayHandler
-				});
+				if (!navAnchor) {
+					return
+				}
+
+				var closestAnchorWrapper = navAnchor.closest('.resource-header')
+				var prevSelectedItem = document.querySelector('.child-nav-item.selected');
+				var prevSelectedItemContainer = document.querySelector('.resource-header.expand');
+
+				prevSelectedItem && prevSelectedItem.classList.remove('selected');
+				prevSelectedItemContainer && prevSelectedItemContainer.classList.remove('expand')
+
+				if(navAnchor.classList.contains('child-nav-item')) {
+					navAnchor.classList.add('selected')
+					closestAnchorWrapper.classList.add('expand')
+				} else if(navAnchor.classList.contains('resource-nav-item')) {
+					closestAnchorWrapper.classList.add('expand')
+				}
+
 			}
-			for(var i = 0;i < hAnchors.length; i++) {
-				new Waypoint({
-					continuous: false,
-					context: document.querySelector('.container'),
-					element: hAnchors[i],
-					handler: wayHandler,
-					offset: 20
-				});
+
+			if (initialHash) {
+				var container = document.querySelector('.container')
+				var content = container.querySelector(initialHash)
+				container.scrollTop = content.offsetTop
+
+				selectSection(initialHash)
 			}
+
 			function debounce(func, wait, immediate) {
 				var timeout;
-				return function() {
+				return function () {
 					var context = this, args = arguments;
-					var later = function() {
+					var later = function () {
 						timeout = null;
 						if (!immediate) func.apply(context, args);
 					};
@@ -243,14 +214,27 @@ body
 					if (callNow) func.apply(context, args);
 				};
 			};
-			var h = window.location.hash
-			if (h) {
-				var navEl = document.querySelector('.sidebar a[_href=\"' + h + '\"]');
-				var selected;
-				selectSection(navEl)
-			} else {
-				var navEl = document.querySelector('.sidebar a');
-				selectSection(navEl)
+
+			var wayHandler = debounce(function() {
+				if (this.element.classList.contains('header-anchor')) {
+					this.element = this.element.parentNode;
+				};
+
+				var elementHash = '#' + this.element.id;
+				selectSection(elementHash)
+			}, 0, true)
+
+			var container = document.querySelector('.container');
+			var waypoints = document.querySelectorAll('.way-point');
+
+			for(var i = 0;i < waypoints.length; i++) {
+				new Waypoint({
+					continuous: false,
+					context: container,
+					element: waypoints[i],
+					handler: wayHandler,
+					offset: 10
+				});
 			}
 
 			// SDK links container align
