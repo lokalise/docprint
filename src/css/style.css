@@ -100,7 +100,7 @@ mark {
 	padding-top: 45px;
 	background: #fafafa;
 }
- 
+
 .sidebar .group-header {
 	color: rgb(82, 98, 105);
 	font-weight: 600;
@@ -165,7 +165,7 @@ mark {
 }
 
 .row {
-	padding-bottom: 50px;
+	padding: 25px 0;
 }
 
 .row:after {
@@ -197,14 +197,13 @@ code, .code {
 .doc-body .group-heading {
 	font-size: 24px;
     font-weight: 400;
-    font-size: 24px;
     line-height: 32px;
     padding: 10px 0;
     margin: 20px 0;
 }
 
 .doc-body .resource-heading {
-	padding: 10px 0px;
+	padding: 10px 0;
     font-weight: 400;
     font-size: 24px;
     line-height: 32px;
@@ -212,7 +211,7 @@ code, .code {
 
 .doc-body .transition-heading {
     color: #292e31;
-    padding: 10px 0px;
+    padding: 10px 0;
     font-weight: 400;
     font-size: 24px;
     line-height: 32px
@@ -250,7 +249,7 @@ li.param, li.attr {
 }
 
 li.param:last-child, li.attr:last-child {
-	border-bottom: none;	
+	border-bottom: none;
 }
 
 .left {
@@ -362,7 +361,6 @@ li.param:last-child, li.attr:last-child {
 }
 
 .rhs-highlight {
-    padding: 0 20px;
     margin: 20px;
     padding: 20px 20px;
     background: #272b2d;
@@ -372,7 +370,6 @@ li.param:last-child, li.attr:last-child {
 }
 
 .rhs-highlight-headers {
-    padding: 0 20px;
     margin: 20px;
     padding: 20px 20px;
     background: #272b2d;
